@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="Reduce el tamaño de tus imágenes JPG, PNG y WebP al límite de KB que necesitas. Optimización local, vista previa y descarga gratuita.">
+  <title>PixelLigero — Reduce imágenes al tamaño que necesitas</title>
+
+<style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fc;
+      --surface: #fff;
+      --text: #14213d;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --border: #e2e8f0;
+      --soft: #eff6ff;
+      --success: #047857;
+      --radius: 22px;
+      --shadow: 0 12px 40px rgb(15 23 42 / 5%);
+    }
+
+* { box-sizing: border-box; }
+
+body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at top, #eaf1ff 0, transparent 55%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+button, input, select { font: inherit; }
+    button, a, input, select { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    a { color: var(--primary); }
+    [hidden] { display: none !important; }
+
+:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: 4px;
+    }
+
+.container {
+      width: min(1120px, calc(100% - 36px));
+      margin-inline: auto;
+    }
+
+.site-header {
+      background: rgb(255 255 255 / 85%);
+      border-bottom: 1px solid var(--border);
+    }
+
+.header-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+.brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 850;
+      letter-spacing: -.6px;
+    }
+
+.brand-icon {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--primary);
+      border-radius: 11px;
+    }
+
+.header-note {
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+.ad-space {
+      min-height: 100px;
+      margin-block: 26px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      background: rgb(255 255 255 / 60%);
+      display: grid;
+      place-items: center;
+      color: #94a3b8;
+      font-size: .67rem;
+      letter-spacing: 2px;
+    }
+
+.hero {
+      max-width: 760px;
+      margin: 38px auto 32px;
+      text-align: center;
+    }
+
+.eyebrow {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-size: .77rem;
+      font-weight: 750;
+    }
+
+h1 {
+      font-size: clamp(2rem, 5.2vw, 3.5rem);
+      line-height: 1.12;
+      letter-spacing: -1.8px;
+      margin: 17px 0;
+    }
+
+h1 span { color: var(--primary); }
+
+.hero p {
+      max-width: 610px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+.workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+.card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      min-width: 0;
+    }
+
+.card-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+.step {
+      display: grid;
+      place-items: center;
+      width: 29px;
+      height: 29px;
+      flex-shrink: 0;
+      border-radius: 9px;
+      color: var(--primary);
+      background: var(--soft);
+      font-size: .85rem;
+      font-weight: 800;
+    }
+
+h2 {
+      margin: 0;
+      font-size: 1.08rem;
+      letter-spacing: -.3px;
+    }
+
+.dropzone {
+      width: 100%;
+      min-height: 185px;
+      padding: 25px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: var(--text);
+      background: #f8faff;
+      border: 2px dashed #bfcee8;
+      border-radius: 16px;
+      transition: background .2s, border-color .2s;
+    }
+
+.dropzone:hover,
+    .dropzone.dragover {
+      background: #eaf2ff;
+      border-color: var(--primary);
+    }
+
+.upload-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 4px;
+      background: #fff;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      font-size: 1.6rem;
+    }
+
+.dropzone strong { font-size: .98rem; }
+    .dropzone small, .help { color: var(--muted); font-size: .8rem; }
+    .help { display: block; margin-top: 7px; }
+
+.file-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      margin-top: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+.file-description { min-width: 0; }
+
+.file-name {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+
+.file-meta {
+      display: block;
+      color: var(--muted);
+      font-size: .76rem;
+    }
+
+.remove {
+      border: 0;
+      background: #e9eef5;
+      color: #475569;
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+
+.field { margin-top: 21px; }
+
+label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+
+input[type="number"], select {
+      width: 100%;
+      min-height: 46px;
+      background: #fff;
+      color: var(--text);
+      border: 1px solid #cbd5e1;
+      border-radius: 11px;
+      padding: 10px 12px;
+    }
+
+.input-unit { position: relative; }
+
+.input-unit input { padding-right: 48px; }
+
+.input-unit span {
+      position: absolute;
+      right: 14px;
+      top: 11px;
+      color: var(--muted);
+      font-size: .9rem;
+      pointer-events: none;
+    }
+
+.presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+.preset {
+      padding: 5px 11px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: #475569;
+      border-radius: 8px;
+      font-size: .77rem;
+    }
+
+.preset[aria-pressed="true"] {
+      background: var(--soft);
+      border-color: #93c5fd;
+      color: #1d4ed8;
+    }
+
+.field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+.button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 49px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 750;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+.button:hover { background: var(--primary-hover); }
+    .submit-button { margin-top: 25px; }
+
+.privacy {
+      margin: 12px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: .75rem;
+    }
+
+.status {
+      margin: 14px 0 0;
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: .84rem;
+      background: var(--soft);
+      color: #1e40af;
+      overflow-wrap: anywhere;
+    }
+
+.status:empty { display: none; }
+    .status.error { background: #fff1f2; color: #be123c; }
+    .status.success { background: #ecfdf5; color: var(--success); }
+
+.loader {
+      height: 4px;
+      margin-top: 14px;
+      background: #dbeafe;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+.loader::after {
+      content: "";
+      display: block;
+      width: 35%;
+      height: 100%;
+      background: var(--primary);
+      animation: loading 1.2s ease-in-out infinite;
+    }
+
+@keyframes loading {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(390%); }
+    }
+
+.preview-box {
+      position: relative;
+      height: 295px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background-color: #f8fafc;
+      background-image:
+        linear-gradient(45deg, #e9edf3 25%, transparent 25%),
+        linear-gradient(-45deg, #e9edf3 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e9edf3 75%),
+        linear-gradient(-45deg, transparent 75%, #e9edf3 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    }
+
+.preview-box img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+.empty-preview {
+      text-align: center;
+      color: var(--muted);
+      background: rgb(255 255 255 / 94%);
+      padding: 20px;
+      border-radius: 14px;
+      margin: 20px;
+    }
+
+.empty-preview span { display: block; font-size: 2rem; }
+    .empty-preview p { margin: 5px 0; font-size: .9rem; }
+
+.preview-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 10px;
+      background: rgb(15 23 42 / 78%);
+      color: #fff;
+      border-radius: 7px;
+      font-size: .72rem;
+    }
+
+.preview-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+.view-button {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+.view-button[aria-pressed="true"] {
+      background: var(--soft);
+      color: var(--primary);
+      border-color: #bfdbfe;
+    }
+
+.metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin: 19px 0;
+    }
+
+.metric {
+      padding: 13px 7px;
+      text-align: center;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+.metric span {
+      display: block;
+      color: var(--muted);
+      font-size: .71rem;
+    }
+
+.metric strong {
+      display: block;
+      margin-top: 4px;
+      font-size: clamp(.9rem, 2vw, 1.08rem);
+      overflow-wrap: anywhere;
+    }
+
+.metric.highlight { background: #ecfdf5; border-color: #a7f3d0; }
+    .metric.highlight strong { color: var(--success); }
+
+.result-detail {
+      color: var(--muted);
+      font-size: .78rem;
+      text-align: center;
+      margin: 12px 0 0;
+    }
+
+.placeholder-note {
+      margin: 19px 0 0;
+      color: var(--muted);
+      font-size: .88rem;
+      text-align: center;
+    }
+
+.info-section {
+      margin-top: 27px;
+      padding: 26px;
+      background: rgb(255 255 255 / 70%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+.info-section h2 { margin-bottom: 14px; }
+
+details { border-top: 1px solid var(--border); padding: 13px 0; }
+    details:last-child { padding-bottom: 0; }
+    summary { cursor: pointer; font-size: .9rem; font-weight: 650; }
+    details p { color: var(--muted); font-size: .86rem; margin: 10px 0 0; }
+
+footer {
+      padding: 8px 0 30px;
+      color: var(--muted);
+      font-size: .79rem;
+      text-align: center;
+    }
+
+@media (max-width: 760px) {
+      .workspace { grid-template-columns: 1fr; }
+      .hero { margin-top: 28px; }
+      .card { padding: 21px; }
+      .header-note { display: none; }
+      .preview-box { height: 270px; }
+      .ad-space { min-height: 90px; }
+    }
+
+@media (max-width: 380px) {
+      .container { width: calc(100% - 24px); }
+      .field-grid { grid-template-columns: 1fr; gap: 0; }
+      .card { padding: 17px; }
+    }
+
+@media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+.loader::after { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./" aria-label="PixelLigero, inicio">
+        <span class="brand-icon" aria-hidden="true">▧</span>
+        PixelLigero
+      </a>
+      <span class="header-note">Sin registro · Procesamiento local</span>
+    </div>
+  </header>
+
+<main class="container">
+    <aside class="ad-space" aria-label="Espacio publicitario superior">
+      <!-- AQUÍ VA EL ANUNCIO -->
+      <span>ESPACIO PUBLICITARIO</span>
+    </aside>
+
+<section class="hero" aria-labelledby="main-title">
+      <span class="eyebrow">MENOS PESO, MÁS POSIBILIDADES</span>
+      <h1 id="main-title">Tu imagen, justo al<br><span>tamaño que necesitas.</span></h1>
+      <p>
+        Elige un límite en KB. Ajustamos la calidad y, cuando es necesario,
+        las dimensiones para que puedas descargar una imagen que lo cumpla.
+      </p>
+    </section>
+
+<div class="workspace">
+      <section class="card" aria-labelledby="settings-title">
+        <div class="card-heading">
+          <span class="step" aria-hidden="true">1</span>
+          <h2 id="settings-title">Sube y configura</h2>
+        </div>
+
+<form id="optimizerForm">
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+          >
+
+<button id="dropzone" class="dropzone" type="button">
+            <span class="upload-icon" aria-hidden="true">↑</span>
+            <strong>Selecciona o arrastra una imagen</strong>
+            <small>JPG, PNG o WebP · Hasta 30 MB y 40 megapíxeles</small>
+          </button>
+
+<div id="fileInfo" class="file-info" hidden>
+            <div class="file-description">
+              <span id="fileName" class="file-name"></span>
+              <span id="fileMeta" class="file-meta"></span>
+            </div>
+            <button
+              id="removeFile"
+              class="remove"
+              type="button"
+              aria-label="Quitar imagen"
+              title="Quitar imagen"
+            >✕</button>
+          </div>
+
+<div class="field">
+            <label for="targetSize">Tamaño máximo del archivo</label>
+            <div class="input-unit">
+              <input
+                id="targetSize"
+                type="number"
+                min="1"
+                max="50000"
+                step="1"
+                value="200"
+                required
+                inputmode="numeric"
+                aria-describedby="targetHelp"
+              >
+              <span>KB</span>
+            </div>
+
+<div class="presets" aria-label="Límites frecuentes">
+              <button class="preset" type="button" data-size="50" aria-pressed="false">50 KB</button>
+              <button class="preset" type="button" data-size="100" aria-pressed="false">100 KB</button>
+              <button class="preset" type="button" data-size="200" aria-pressed="true">200 KB</button>
+              <button class="preset" type="button" data-size="500" aria-pressed="false">500 KB</button>
+              <button class="preset" type="button" data-size="1000" aria-pressed="false">1 MB</button>
+            </div>
+
+<small id="targetHelp" class="help">
+              Usamos 1 KB = 1.000 bytes. Se comprueba el peso real antes de descargar.
+            </small>
+          </div>
+
+<div class="field-grid">
+            <div class="field">
+              <label for="outputFormat">Formato de salida</label>
+              <select id="outputFormat">
+                <option value="image/jpeg">JPG · Compatible</option>
+                <option value="image/webp">WebP · Transparencia</option>
+              </select>
+            </div>
+
+<div class="field">
+              <label for="maxDimension">Lado máximo (px)</label>
+              <input
+                id="maxDimension"
+                type="number"
+                min="1"
+                max="4096"
+                step="1"
+                value="1920"
+                required
+                inputmode="numeric"
+                aria-describedby="dimensionHelp"
+              >
+            </div>
+          </div>
+
+<small id="dimensionHelp" class="help">
+            Conserva la proporción y nunca amplía la imagen.
+            JPG convierte la transparencia en fondo blanco.
+          </small>
+
+<button id="optimizeButton" class="button submit-button" type="submit" disabled>
+            Optimizar imagen <span aria-hidden="true">→</span>
+          </button>
+
+<p class="privacy">
+            La herramienta no envía tus imágenes a ningún servidor.
+          </p>
+
+<div id="loader" class="loader" hidden aria-hidden="true"></div>
+          <p id="status" class="status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+      </section>
+
+<section id="resultCard" class="card" aria-labelledby="result-title" aria-busy="false">
+        <div class="card-heading">
+          <span class="step" aria-hidden="true">2</span>
+          <h2 id="result-title">Previsualiza y descarga</h2>
+        </div>
+
+<div id="previewActions" class="preview-actions" hidden>
+          <button id="viewOriginal" class="view-button" type="button" aria-pressed="true">
+            Original
+          </button>
+          <button id="viewOptimized" class="view-button" type="button" aria-pressed="false" disabled>
+            Optimizada
+          </button>
+        </div>
+
+<div class="preview-box">
+          <div id="emptyPreview" class="empty-preview">
+            <span aria-hidden="true">▧</span>
+            <p>Tu imagen aparecerá aquí</p>
+            <small>Lista para pesar menos.</small>
+          </div>
+
+<img id="previewImage" alt="Vista previa de la imagen seleccionada" hidden>
+          <span id="previewTag" class="preview-tag" hidden>Original</span>
+        </div>
+
+<p id="placeholderNote" class="placeholder-note">
+          Selecciona una imagen para comenzar.
+        </p>
+
+<div id="resultContent" hidden>
+          <div class="metrics">
+            <div class="metric">
+              <span>Original</span>
+              <strong id="originalSize">—</strong>
+            </div>
+            <div class="metric highlight">
+              <span>Resultado</span>
+              <strong id="finalSize">—</strong>
+            </div>
+            <div class="metric">
+              <span id="changeLabel">Reducción</span>
+              <strong id="sizeChange">—</strong>
+            </div>
+          </div>
+
+<a id="downloadButton" class="button" download>
+            Descargar imagen <span aria-hidden="true">↓</span>
+          </a>
+
+<p id="resultDetail" class="result-detail"></p>
+        </div>
+      </section>
+    </div>
+
+<section class="info-section" aria-labelledby="faq-title">
+      <h2 id="faq-title">Lo que necesitas saber</h2>
+
+<details>
+        <summary>¿Cómo se alcanza el límite de tamaño?</summary>
+        <p>
+          Primero se prueba una calidad alta. Si el archivo supera el límite,
+          se busca una calidad menor. Si eso no basta, se reducen las dimensiones
+          manteniendo la proporción y se repite el proceso. Un límite muy pequeño
+          puede producir una imagen con poco detalle.
+        </p>
+      </details>
+
+<details>
+        <summary>¿Qué formato conviene elegir?</summary>
+        <p>
+          JPG suele ser una opción compatible para fotografías y formularios.
+          WebP permite conservar transparencias. Comprueba qué formatos admite
+          la página donde vas a utilizar la imagen.
+        </p>
+      </details>
+
+<details>
+        <summary>¿Se conservan animaciones y metadatos?</summary>
+        <p>
+          La salida es una imagen estática: las animaciones no se conservan.
+          La imagen se vuelve a generar con Canvas y no se copian los metadatos
+          originales, como EXIF. No es una herramienta de preservación de
+          perfiles de color ni de edición sin pérdida.
+        </p>
+      </details>
+
+<details>
+        <summary>¿Por qué el resultado no pesa exactamente lo indicado?</summary>
+        <p>
+          El valor elegido es un máximo, no un tamaño exacto. El peso depende
+          del contenido, las dimensiones y el codificador del navegador.
+          No se añade relleno para aumentar artificialmente el archivo.
+        </p>
+      </details>
+    </section>
+
+<aside class="ad-space" aria-label="Espacio publicitario inferior">
+      <!-- AQUÍ VA EL ANUNCIO -->
+      <span>ESPACIO PUBLICITARIO</span>
+    </aside>
+  </main>
+
+<footer class="container">
+    PixelLigero · Imágenes más ligeras, sin complicaciones.
+  </footer>
+
+<noscript>
+    <p style="text-align:center;padding:20px">
+      Activa JavaScript para utilizar el optimizador de imágenes.
+    </p>
+  </noscript>
+
+<script>
+    "use strict";
+
+const $ = (id) => document.getElementById(id);
+
+const ui = {
+      form: $("optimizerForm"),
+      fileInput: $("fileInput"),
+      dropzone: $("dropzone"),
+      fileInfo: $("fileInfo"),
+      fileName: $("fileName"),
+      fileMeta: $("fileMeta"),
+      removeFile: $("removeFile"),
+      targetSize: $("targetSize"),
+      outputFormat: $("outputFormat"),
+      maxDimension: $("maxDimension"),
+      optimizeButton: $("optimizeButton"),
+      status: $("status"),
+      loader: $("loader"),
+      resultCard: $("resultCard"),
+      previewActions: $("previewActions"),
+      viewOriginal: $("viewOriginal"),
+      viewOptimized: $("viewOptimized"),
+      previewImage: $("previewImage"),
+      previewTag: $("previewTag"),
+      emptyPreview: $("emptyPreview"),
+      placeholderNote: $("placeholderNote"),
+      resultContent: $("resultContent"),
+      originalSize: $("originalSize"),
+      finalSize: $("finalSize"),
+      changeLabel: $("changeLabel"),
+      sizeChange: $("sizeChange"),
+      downloadButton: $("downloadButton"),
+      resultDetail: $("resultDetail")
+    };
+
+const presets = [...document.querySelectorAll(".preset")];
+
+const MAX_FILE_BYTES = 30 * 1000 * 1000;
+    const MAX_PIXELS = 40 * 1000 * 1000;
+    const MAX_SIDE = 4096;
+    const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+let selectedFile = null;
+    let sourceImage = null;
+    let originalURL = null;
+    let resultURL = null;
+    let busy = false;
+
+function formatBytes(bytes) {
+      if (bytes < 1000) return `${bytes} B`;
+      const unit = bytes >= 1000000 ? "MB" : "KB";
+      const value = bytes / (unit === "MB" ? 1000000 : 1000);
+      return `${value.toLocaleString("es-ES", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      })} ${unit}`;
+    }
+
+function setStatus(message, type = "") {
+      ui.status.className = `status${type ? " " + type : ""}`;
+      ui.status.textContent = message;
+    }
+
+function setBusy(value) {
+      busy = value;
+
+[
+        ui.fileInput,
+        ui.dropzone,
+        ui.removeFile,
+        ui.targetSize,
+        ui.outputFormat,
+        ui.maxDimension,
+        ...presets
+      ].forEach((element) => {
+        element.disabled = value;
+      });
+
+ui.optimizeButton.disabled = value || !sourceImage;
+      ui.optimizeButton.textContent = value ? "Procesando…" : "Optimizar imagen →";
+      ui.loader.hidden = !value;
+      ui.resultCard.setAttribute("aria-busy", String(value));
+    }
+
+function showPreview(optimized = false) {
+      const useResult = optimized && Boolean(resultURL);
+      const url = useResult ? resultURL : originalURL;
+
+if (!url) return;
+
+ui.previewImage.src = url;
+      ui.previewImage.hidden = false;
+      ui.emptyPreview.hidden = true;
+      ui.previewTag.hidden = false;
+      ui.previewActions.hidden = false;
+      ui.previewTag.textContent = useResult ? "Optimizada" : "Original";
+      ui.previewImage.alt = useResult
+        ? "Vista previa de la imagen optimizada"
+        : "Vista previa de la imagen original";
+
+ui.viewOriginal.setAttribute("aria-pressed", String(!useResult));
+      ui.viewOptimized.setAttribute("aria-pressed", String(useResult));
+    }
+
+function clearResult() {
+      // Retirar referencias antes de liberar la URL anterior.
+      if (originalURL) showPreview(false);
+
+ui.downloadButton.removeAttribute("href");
+      ui.downloadButton.removeAttribute("download");
+
+if (resultURL) {
+        URL.revokeObjectURL(resultURL);
+        resultURL = null;
+      }
+
+ui.resultContent.hidden = true;
+      ui.viewOptimized.disabled = true;
+      ui.placeholderNote.hidden = false;
+      ui.placeholderNote.textContent = selectedFile
+        ? "Configura el límite y pulsa «Optimizar imagen»."
+        : "Selecciona una imagen para comenzar.";
+    }
+
+function clearSource() {
+      clearResult();
+
+ui.previewImage.removeAttribute("src");
+
+if (sourceImage) {
+        if (typeof sourceImage.close === "function") {
+          sourceImage.close();
+        } else {
+          sourceImage.src = "";
+        }
+        sourceImage = null;
+      }
+
+if (originalURL) {
+        URL.revokeObjectURL(originalURL);
+        originalURL = null;
+      }
+
+selectedFile = null;
+      ui.fileInput.value = "";
+      ui.fileInfo.hidden = true;
+      ui.previewImage.hidden = true;
+      ui.previewTag.hidden = true;
+      ui.previewActions.hidden = true;
+      ui.emptyPreview.hidden = false;
+      ui.placeholderNote.textContent = "Selecciona una imagen para comenzar.";
+      ui.optimizeButton.disabled = true;
+    }
+
+async function decodeImage(file, url) {
+      if ("createImageBitmap" in window) {
+        try {
+          return await createImageBitmap(file, {
+            imageOrientation: "from-image"
+          });
+        } catch {
+          // Compatibilidad con navegadores que requieren HTMLImageElement.
+        }
+      }
+
+return new Promise((resolve, reject) => {
+        const image = new Image();
+
+image.onload = () => resolve(image);
+        image.onerror = () => reject(
+          new Error("No se pudo leer la imagen. Puede estar dañada o usar un formato no compatible.")
+        );
+
+image.src = url;
+      });
+    }
+
+function dimensions(image) {
+      return {
+        width: image.naturalWidth || image.width,
+        height: image.naturalHeight || image.height
+      };
+    }
+
+async function loadFile(file) {
+      if (busy || !file) return;
+
+if (!ALLOWED_TYPES.has(file.type)) {
+        setStatus("Selecciona un archivo JPG, PNG o WebP válido.", "error");
+        return;
+      }
+
+if (file.size === 0 || file.size > MAX_FILE_BYTES) {
+        setStatus("El archivo debe tener contenido y no superar los 30 MB.", "error");
+        return;
+      }
+
+clearSource();
+      setBusy(true);
+      setStatus("Leyendo imagen…");
+
+try {
+        originalURL = URL.createObjectURL(file);
+        sourceImage = await decodeImage(file, originalURL);
+
+const { width, height } = dimensions(sourceImage);
+
+if (!width || !height || width * height > MAX_PIXELS) {
+          throw new Error(
+            "La imagen supera los 40 megapíxeles o tiene dimensiones no válidas. Usa una versión más pequeña."
+          );
+        }
+
+selectedFile = file;
+
+ui.fileName.textContent = file.name;
+        ui.fileName.title = file.name;
+        ui.fileMeta.textContent = `${formatBytes(file.size)} · ${width} × ${height} px`;
+        ui.fileInfo.hidden = false;
+
+showPreview(false);
+        ui.placeholderNote.textContent = "Configura el límite y pulsa «Optimizar imagen».";
+        setStatus("Imagen lista para optimizar.");
+      } catch (error) {
+        clearSource();
+        setStatus(error.message || "No se pudo abrir la imagen.", "error");
+      } finally {
+        // Permite seleccionar de nuevo el mismo archivo.
+        ui.fileInput.value = "";
+        setBusy(false);
+      }
+    }
+
+function canvasToBlob(canvas, mime, quality) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("El navegador no pudo generar la imagen. Prueba con dimensiones menores."));
+            return;
+          }
+
+// Algunos navegadores devuelven PNG si no admiten el formato solicitado.
+          if (blob.type !== mime) {
+            reject(new Error(
+              "Este navegador no permite exportar en el formato elegido. Prueba JPG u otro navegador."
+            ));
+            return;
+          }
+
+resolve(blob);
+        }, mime, quality);
+      });
+    }
+
+function nextFrame() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+
+/*
+      Estrategia:
+      1. Limitar dimensiones iniciales sin ampliar.
+      2. Probar calidad alta.
+      3. Buscar la mejor calidad aproximada que cumpla el límite.
+      4. Si ni la calidad baja cabe, reducir dimensiones y repetir.
+      5. Aceptar únicamente blobs cuyo tamaño real no supere el máximo.
+    */
+    async function compressToTarget(image, mime, targetBytes, maxSide) {
+      const original = dimensions(image);
+      const scale = Math.min(1, maxSide / Math.max(original.width, original.height));
+
+let width = Math.max(1, Math.floor(original.width * scale));
+      let height = Math.max(1, Math.floor(original.height * scale));
+
+const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+if (!context) {
+        throw new Error("Tu navegador no admite el procesamiento de imágenes con Canvas.");
+      }
+
+const minQuality = 0.08;
+      const maxQuality = 0.95;
+
+try {
+        for (let pass = 0; pass < 32; pass++) {
+          setStatus(`Ajustando imagen: ${width} × ${height} px…`);
+          await nextFrame();
+
+canvas.width = width;
+          canvas.height = height;
+
+context.imageSmoothingEnabled = true;
+          context.imageSmoothingQuality = "high";
+
+if (mime === "image/jpeg") {
+            context.fillStyle = "#ffffff";
+            context.fillRect(0, 0, width, height);
+          } else {
+            context.clearRect(0, 0, width, height);
+          }
+
+// Siempre dibujar desde el original, no desde versiones comprimidas.
+          context.drawImage(image, 0, 0, width, height);
+
+const highBlob = await canvasToBlob(canvas, mime, maxQuality);
+
+if (highBlob.size <= targetBytes) {
+            return { blob: highBlob, width, height };
+          }
+
+const lowBlob = await canvasToBlob(canvas, mime, minQuality);
+
+if (lowBlob.size <= targetBytes) {
+            let bestBlob = lowBlob;
+            let lower = minQuality;
+            let upper = maxQuality;
+
+// Búsqueda aproximada; cada candidato aceptado se valida por bytes.
+            for (let attempt = 0; attempt < 9; attempt++) {
+              const quality = (lower + upper) / 2;
+              const candidate = await canvasToBlob(canvas, mime, quality);
+
+if (candidate.size <= targetBytes) {
+                bestBlob = candidate;
+                lower = quality;
+              } else {
+                upper = quality;
+              }
+            }
+
+return { blob: bestBlob, width, height };
+          }
+
+if (width === 1 && height === 1) break;
+
+const factor = Math.max(
+            0.5,
+            Math.min(0.9, Math.sqrt(targetBytes / lowBlob.size) * 0.92)
+          );
+
+// Recalcular según la proporción original para evitar deformaciones.
+          const nextLongest = Math.max(
+            1,
+            Math.floor(Math.max(width, height) * factor)
+          );
+
+const nextScale = nextLongest / Math.max(original.width, original.height);
+
+width = Math.max(1, Math.floor(original.width * nextScale));
+          height = Math.max(1, Math.floor(original.height * nextScale));
+        }
+
+throw new Error(
+          "No se pudo alcanzar ese límite con este formato. Aumenta los KB o prueba otro formato."
+        );
+      } finally {
+        // Liberar la memoria del lienzo temporal.
+        canvas.width = 1;
+        canvas.height = 1;
+      }
+    }
+
+function downloadName(name, mime, targetKB) {
+      const base = name
+        .replace(/\.[^.]+$/, "")
+        .replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]+/g, "-")
+        .slice(0, 90) || "imagen";
+
+const extension = mime === "image/webp" ? "webp" : "jpg";
+      return `${base}-${targetKB}kb.${extension}`;
+    }
+
+ui.form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+if (busy || !sourceImage || !selectedFile) return;
+      if (!ui.form.reportValidity()) return;
+
+const targetKB = Number(ui.targetSize.value);
+      const maxSide = Number(ui.maxDimension.value);
+      const mime = ui.outputFormat.value;
+
+if (
+        !Number.isInteger(targetKB) ||
+        targetKB < 1 ||
+        targetKB > 50000 ||
+        !Number.isInteger(maxSide) ||
+        maxSide < 1 ||
+        maxSide > MAX_SIDE ||
+        !["image/jpeg", "image/webp"].includes(mime)
+      ) {
+        setStatus("Revisa el límite, el formato y las dimensiones.", "error");
+        return;
+      }
+
+const targetBytes = targetKB * 1000;
+
+clearResult();
+      setBusy(true);
+      setStatus("Preparando optimización…");
+
+try {
+        const result = await compressToTarget(
+          sourceImage,
+          mime,
+          targetBytes,
+          maxSide
+        );
+
+// Verificación final obligatoria.
+        if (result.blob.size > targetBytes) {
+          throw new Error("El resultado supera el límite. Prueba con otro ajuste.");
+        }
+
+resultURL = URL.createObjectURL(result.blob);
+
+const reduction = (1 - result.blob.size / selectedFile.size) * 100;
+        const isSmaller = reduction >= 0;
+
+ui.originalSize.textContent = formatBytes(selectedFile.size);
+        ui.finalSize.textContent = formatBytes(result.blob.size);
+        ui.changeLabel.textContent = isSmaller ? "Reducción" : "Aumento";
+        ui.sizeChange.textContent = `${Math.abs(reduction).toLocaleString("es-ES", {
+          maximumFractionDigits: 1
+        })}%`;
+
+ui.downloadButton.href = resultURL;
+        ui.downloadButton.download = downloadName(selectedFile.name, mime, targetKB);
+
+const formatLabel = mime === "image/webp" ? "WebP" : "JPG";
+        ui.resultDetail.textContent =
+          `${result.width} × ${result.height} px · ${formatLabel} · ` +
+          `${result.blob.size.toLocaleString("es-ES")} bytes · Límite cumplido`;
+
+ui.resultContent.hidden = false;
+        ui.placeholderNote.hidden = true;
+        ui.viewOptimized.disabled = false;
+
+showPreview(true);
+
+const sourceDimensions = dimensions(sourceImage);
+        const resized =
+          result.width < sourceDimensions.width ||
+          result.height < sourceDimensions.height;
+
+let message = "¡Listo! El archivo cumple el límite indicado.";
+
+if (resized) {
+          message += " Se han reducido las dimensiones.";
+        }
+
+if (!isSmaller) {
+          message += " La conversión pesa más que el original, aunque no supera tu límite.";
+        }
+
+setStatus(message, "success");
+      } catch (error) {
+        clearResult();
+        setStatus(
+          error.message || "No se pudo optimizar la imagen. Prueba con un archivo más pequeño.",
+          "error"
+        );
+      } finally {
+        setBusy(false);
+      }
+    });
+
+ui.dropzone.addEventListener("click", () => {
+      if (!busy) ui.fileInput.click();
+    });
+
+ui.fileInput.addEventListener("change", () => {
+      loadFile(ui.fileInput.files[0]);
+    });
+
+["dragenter", "dragover"].forEach((type) => {
+      ui.dropzone.addEventListener(type, (event) => {
+        event.preventDefault();
+        if (!busy) ui.dropzone.classList.add("dragover");
+      });
+    });
+
+["dragleave", "drop"].forEach((type) => {
+      ui.dropzone.addEventListener(type, (event) => {
+        event.preventDefault();
+        ui.dropzone.classList.remove("dragover");
+      });
+    });
+
+ui.dropzone.addEventListener("drop", (event) => {
+      if (busy) return;
+
+const files = event.dataTransfer.files;
+
+if (files.length !== 1) {
+        setStatus("Arrastra una sola imagen cada vez.", "error");
+        return;
+      }
+
+loadFile(files[0]);
+    });
+
+// Evitar que el navegador abra un archivo soltado fuera de la zona.
+    ["dragover", "drop"].forEach((type) => {
+      window.addEventListener(type, (event) => {
+        if (Array.from(event.dataTransfer?.types || []).includes("Files")) {
+          event.preventDefault();
+        }
+      });
+    });
+
+ui.removeFile.addEventListener("click", () => {
+      if (busy) return;
+      clearSource();
+      setStatus("");
+      ui.dropzone.focus();
+    });
+
+ui.viewOriginal.addEventListener("click", () => showPreview(false));
+    ui.viewOptimized.addEventListener("click", () => showPreview(true));
+
+function updatePresets() {
+      presets.forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(Number(button.dataset.size) === Number(ui.targetSize.value))
+        );
+      });
+    }
+
+function settingsChanged() {
+      updatePresets();
+
+if (resultURL) {
+        clearResult();
+        setStatus("Has cambiado los ajustes. Optimiza de nuevo para aplicarlos.");
+      }
+    }
+
+presets.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (busy) return;
+        ui.targetSize.value = button.dataset.size;
+        settingsChanged();
+      });
+    });
+
+ui.targetSize.addEventListener("input", settingsChanged);
+    ui.maxDimension.addEventListener("input", settingsChanged);
+    ui.outputFormat.addEventListener("change", settingsChanged);
+  </script>
+</body>
+</html>
